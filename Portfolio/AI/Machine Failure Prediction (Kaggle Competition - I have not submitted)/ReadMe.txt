@@ -9,7 +9,7 @@ RNF	Int	Random Failure binary feature
 
 
 The binary features consist of a variable indicating whether there's a failure or not, followed by 5 variables indicating the area/cause of failure.
- 5 different area of variable is described as follow:
+5 different area of variable is described as follow:
 
 TWF (Tool Wear Failure) indicating industrial tool failure resulting in the need for equipment change and defective products.
 HDF (Heat Dissipation Failure) indicating failure in heat dissipation during the production process.
