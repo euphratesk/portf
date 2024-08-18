@@ -1,0 +1,146 @@
+import csv
+import os
+import tarfile
+import urllib.request
+from datetime import timedelta
+
+
+
+
+from airflow import DAG
+from airflow.operators.python_opereator import PythonOperator 
+from airflow.utils.dates import days_ago
+
+
+
+#preparing the directories for input and output data
+
+
+destination = "home/project/airflow/dags/finalassignment/staging"
+source = os.path.join(DESTINATION,"tolldata.tgz")
+vehicle_data = os.path.join(DESTINATION,"vehicle-data.csv")
+tollplaza_data = os.path.join(DESTINATION,"tollplaza-data.tsv")
+payment_data = os.path.join(DESTINATION,"payment-data.txt")
+csv_data = os.path.join(DESTINATION,"csv_data.csv ")
+tsv_data = os.path.join(DESTINATION,"tsv_data.csv")
+fixed_width_data = os.path.join(DESTINATION,"fixed_width_data.csv")
+extracted_data = os.path.join(DESTINATION, "extracted_data.csv")
+transformed_data = os.path.join(DESTINATION, "staging/transformed_data.csv")
+
+
+
+
+#>>>> defining dag arguments
+
+default_args = {
+    'owner' : 'my name',
+    'start_date' : days_ago(0),
+    'email' : ['me@gmai.com'],
+    'email_on_failure' : True,
+    'email_on_retry': True,
+    'retries' : 1,
+    'retry_delay' : timedelta(minutes = 5),
+    }
+
+
+
+#>>>> define DAG object
+
+dag = DAG(
+    dag_id = 'ETL_toll_data',
+    schedule_interval = dt.timedelta(days =1),
+    default_args =  default_args,
+    description = 'Apache Airflow Final Assignment',
+    )
+
+
+
+#>>>> download dataset 
+
+def download_dataset(url,filename):
+    urllib.request.urlretrieve(url,filename)
+    return
+
+
+#>>>> untar downloaded dataset
+
+def untar_tolldata(source,destination):
+    try:
+        with tarfile.open(source, "r:gz") as tgz:
+            tgz.extractall(destination)
+    except Exception as e:
+        print(f"Error extracting {source}: {e}")
+
+
+
+
+
+
+
+#>>>> extract data from csv
+
+def extract_data_from_csv(input_file=vehicle_data, extracted_file=csv_data):
+    print("Inside Extract")
+
+    # Open the input CSV file for reading and the output CSV file for writing
+    with open(input_file, 'r') as infile, open(extracted_file, 'w', newline='') as outfile:
+        reader = csv.reader(infile)
+        writer = csv.writer(outfile)
+
+        for fields in reader:
+            # Ensure there are at least four fields before accessing them
+            if len(fields) >= 4:
+                field_1 = fields[0]
+                field_2 = fields[1]
+                field_3 = fields[2]
+                field_4 = fields[3]
+
+                # Write the selected fields to the output CSV file
+                writer.writerow([field_1, field_2, field_3, field_4])
+
+    print(f"Data extracted to {extracted_file}")
+
+
+
+
+
+
+#>>>> extract data from tsv
+
+def extract_data_from_tsv(input_file, extracted_file):
+    print("Inside Extract")
+
+    # Open the input TSV file for reading and the output CSV file for writing
+    with open(input_file, 'r') as infile, open(extracted_file, 'w', newline='') as outfile:
+        reader = csv.reader(infile, delimiter='\t')
+        writer = csv.writer(outfile)
+
+        for fields in reader:
+            # Ensure there are at least four fields before accessing them
+            if len(fields) >= 4:
+                field_1 = fields[4]
+                field_2 = fields[5]
+                field_3 = fields[6]
+                
+
+                # Write the selected fields to the output CSV file
+                writer.writerow([field_1, field_2, field_3])
+
+    print(f"Data extracted to {extracted_file}")
+
+
+
+
+#>>>> extract data from fixed_width txt data
+
+def extract_data_from_fixed_width(input_file, extracted_file):
+    with open(input_file, 'r') as infile, open(extracted_file, 'w', newline='') as outfile:
+        writer = csv.writer(outfile)
+        
+        for line in infile:
+            # Assuming fixed width fields are separated by spaces and using only the last two fields
+            fields = line.split()
+            if len(fields) >= 2:
+                field_1 = fields[-2]
+                field_2 = fields[-1]
+                writer.writerow([field_1, field_2])
