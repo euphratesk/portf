@@ -144,11 +144,3 @@ def extract_data_from_fixed_width(input_file, extracted_file):
                 field_1 = fields[-2]
                 field_2 = fields[-1]
                 writer.writerow([field_1, field_2])
-
-
-# >>>> consolidate former data into a combined csv file
-
-def consolidate_data(infile,outfile,column_names):
-    combined_df = pd.concat([pd.read_csv(x,header=None) for x in infile],axis=1)
-    combined_df.columns =  column_names
-    combined_df.to_csv(outfile,index=False)
