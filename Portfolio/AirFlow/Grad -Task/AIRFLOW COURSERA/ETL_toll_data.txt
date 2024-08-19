@@ -79,7 +79,7 @@ def untar_tolldata(source,destination):
 
 #>>>> extract data from csv
 
-def extract_data_from_csv(input_file=vehicle_data, extracted_file=csv_data):
+def extract_data_from_csv(input_file, extracted_file):
     print("Inside Extract")
 
     # Open the input CSV file for reading and the output CSV file for writing
@@ -144,3 +144,43 @@ def extract_data_from_fixed_width(input_file, extracted_file):
                 field_1 = fields[-2]
                 field_2 = fields[-1]
                 writer.writerow([field_1, field_2])
+
+
+
+
+
+#>>>> Consolidate csv docs into a single doc
+
+def consolidate_data(infile,outfile,column_names):
+    combined_df = pd.concat([pd.read_csv(x,header=None) for x in infile],axis=1)
+    combined_df.columns =  column_names
+    combined_df.to_csv(extracted_data,index=False)
+
+
+
+
+
+
+
+
+
+
+#>>>> transform Vehicle Type into uppercase
+
+def transform_data(input_file, extracted_file):
+    print("Inside Extract")
+
+    # Open the input CSV file for reading and the output CSV file for writing
+    with open(input_file, 'r') as infile, open(extracted_file, 'w', newline='') as outfile:
+        reader = csv.reader(infile)
+        writer = csv.writer(outfile)
+
+        for fields in reader:
+            # Ensure there are at least four fields before accessing them
+            
+            field_vehicle = fields[3].upper()
+               
+
+            # Write the selected fields to the output CSV file
+            writer.writerow([field_vehicle])
+
