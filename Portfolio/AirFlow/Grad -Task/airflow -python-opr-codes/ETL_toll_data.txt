@@ -28,6 +28,8 @@ extracted_data = os.path.join(DESTINATION, "extracted_data.csv")
 transformed_data = os.path.join(DESTINATION, "staging/transformed_data.csv")
 
 
+url = "https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DB0250EN-SkillsNetwork/labs/Final%20Assignment/tolldata.tgz"
+filename = 'tolldata.tgz'
 
 
 #>>>> defining dag arguments
@@ -57,7 +59,7 @@ dag = DAG(
 
 #>>>> download dataset 
 
-def download_dataset(url,filename):
+def download_data(url,filename):
     urllib.request.urlretrieve(url,filename)
     return
 
@@ -187,6 +189,13 @@ def transform_data(input_file, extracted_file):
 
 
 
+download_data = PythonOperator(
+    task_id = 'download_data',
+    python_callable = download_dataset,
+    op_args = [url, filename],
+    dag =dag,
+    )
+
 untar_tolldata = PythonOperator(
     task_id = 'unzip_data',
     python_callable = untar_tolldata,
@@ -239,5 +248,5 @@ transform_data = PythonOperator(
 
 
 
-untar_tolldata >> [extract_data_from_csv, extract_data_from_tsv, extract_data_from_fixed_width] >> consolidate_data >> transform_data
+download_data >> untar_tolldata >> extract_data_from_csv >> extract_data_from_tsv >> extract_data_from_fixed_width >> consolidate_data >> transform_data
 

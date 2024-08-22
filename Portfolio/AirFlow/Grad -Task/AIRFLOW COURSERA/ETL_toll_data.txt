@@ -184,3 +184,60 @@ def transform_data(input_file, extracted_file):
             # Write the selected fields to the output CSV file
             writer.writerow([field_vehicle])
 
+
+
+
+untar_tolldata = PythonOperator(
+    task_id = 'unzip_data',
+    python_callable = untar_tolldata,
+    op_args = [source,destination],
+    dag = dag,
+    )
+
+
+extract_data_from_csv = PythonOperator(
+    task_id = 'extract_data_from_csv',
+    python_callable = extract_data_from_csv,
+    op_args = [vehicle_data, csv_data],
+    dag =dag,
+    )
+
+
+extract_data_from_tsv = PythonOperator(
+    task_id = 'extract_data_from_tsv',
+    python_callable = extract_data_from_tsv,
+    op_args = [tollplaza_data, tsv_data],
+    dag =dag,
+    )
+
+
+extract_data_from_fixed_width = PythonOperator(
+    task_id = 'extract_data_from_fixed_width',
+    python_callable = extract_data_from_fixed_width,
+    op_args = [payment_data, fixed_width_data],
+    dag =dag,
+    )
+
+
+consolidate_data = PythonOperator(
+    task_id = 'consolidate_data',
+    python_callable = consolidate_data,
+    op_args = [[csv_data, tsv_data, fixed_width_data],extracted_data],
+    dag =dag,
+    )
+
+
+
+transform_data = PythonOperator(
+    task_id = 'transform_data',
+    python_callable = transform_data,
+    op_args = [extracted_data, transformed_data],
+    dag =dag,
+    )
+
+
+
+
+
+untar_tolldata >> [extract_data_from_csv, extract_data_from_tsv, extract_data_from_fixed_width] >> consolidate_data >> transform_data
+
