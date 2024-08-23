@@ -29,7 +29,8 @@ transformed_data = os.path.join(DESTINATION, "staging/transformed_data.csv")
 
 
 
-
+url = ' https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DB0250EN-SkillsNetwork/labs/Final%20Assignment/tolldata.tgz'filename = 'tolldata.tgz'
+filename = 'tolldata.tgz'
 #>>>> defining dag arguments
 
 default_args = {
