@@ -1,12 +1,13 @@
-From python:3.8
+
+FROM  python:3.12
 
 ENV PYTHONUNBUFFERED 1
 
-WORKDIR /docApp
+WORKDIR /app
 
-COPY r"C:\Users\Admin\OneDrive\Desktop\Docker\Streamlit\Car_Price_Prediction-lesson"
+COPY . /app/
 
 RUN pip install -r requirement.txt
 
-CMD ["streamlit","run","appDENEME.py"]
+CMD ["streamlit","run","app.py"]
 
