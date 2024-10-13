@@ -1,0 +1,781 @@
+-: Hello my friends and welcome
+
+to this new practical activity
+
+on this time dimensionality reduction,
+
+which is not a branch of machine learning per se
+
+but a very important technique
+
+to know how to handle when you work with big data sets.
+
+Huge data sets with many features
+
+and for which you would like to reduce the complexity
+
+by reducing the dimensionality.
+
+And this is exactly what dimensionality reduction is about.
+
+So in this new part, part nine dimensionality reduction,
+
+we will build three different models
+
+that can perform such a task.
+
+These are first principle component analysis
+
+the most famous one,
+
+then linear discriminant analysis,
+
+and finally, Canal PCA.
+
+So we will build these three models, one for each section.
+
+And now we're about to start with the first one,
+
+principle component analysis.
+
+But before we start,
+
+let's just make sure everyone here is on the same page.
+
+I gave you the link to this folder
+
+right before this tutorial in the articles,
+
+so make sure to connect to it.
+
+And now we should be all on the same page.
+
+So we're gonna go into part nine, Dimensionality Reduction.
+
+All right.
+
+And as I told you, you have the three sections
+
+corresponding to each of the models,
+
+and we're gonna start with
+
+principle component analysis, PCA.
+
+And as usual we're gonna start with Python.
+
+And then this Python folder,
+
+you will find two files as usual.
+
+First, the implementation in IPY, and B format,
+
+which now once again,
+
+we will be able to run on Google Collaboratory
+
+because we will work with a classic dataset.
+
+And speaking of which, here is the dataset wine.csv.
+
+So let's open it and let me explain what this is about.
+
+All right, so actually first you notice indeed
+
+that we have many features.
+
+I did not take a dataset with hundreds of features
+
+because then we would, , get lost in dataset.
+
+So I just took a dataset with more than 10 features.
+
+And of course these are all the features from here
+
+alcohol to this one, proline.
+
+And as you can guess
+
+each feature gives a certain information
+
+of a certain wine, right?
+
+Each row corresponds to a wine.
+
+And for each wine we have diverse informations
+
+diverse features, characteristics of the wine.
+
+The alcohol level, the malic acid,
+
+I'm not an expert of wines
+
+but these are some wines characteristics.
+
+Ash alkalinity, magnesium, total phenols, flavanoids.
+
+Anyway, so you see you have many wine features
+
+and for each of these wines, well there we go,
+
+I'm about to explain the dependent variable
+
+for each of these wines.
+
+We have the customer segment,
+
+that's the last column to which the wines belong, okay?
+
+So let me explain what happens in terms of business.
+
+First of all, this is a data set
+
+I took from the UCI ML repository.
+
+So all the credits go of course
+
+to this amazing platform of data sets.
+
+However, in this data set
+
+I just changed the last column, customer segment,
+
+to make it more business wise.
+
+To make this case study more a business case study.
+
+Because the scenario is the following.
+
+Let's imagine that this data set belongs to a wine merchant
+
+with many different bottles of wine to sell
+
+and therefore a large base of customers.
+
+And this wine shop owner actually hired you
+
+as data scientist to first do a preliminary work
+
+of clustering.
+
+Meaning that at first we had all these features
+
+without this last column, customer segment.
+
+We have all these features from alcohol to proline,
+
+and this wine shop owner actually asked you to
+
+perform some clustering
+
+to identify diverse segments of customers,
+
+grouped by similarities
+
+which correspond to the wines they prefer, all right?
+
+So each customer segment here,
+
+and by the way there are three of them, right?
+
+If we scroll down, we can see
+
+that we have three different categories
+
+or clusters, and each of these segments
+
+well correspond to a certain group of customers
+
+that have similar preferences for similar wines.
+
+And that's exactly what these segments are about.
+
+But that was the first work.
+
+And if you want you can have fun
+
+and do this first work yourself,
+
+but here we wanna work on dimensionality reduction.
+
+So there goes the second mission
+
+that this wine shop owner asks you to do.
+
+This wine shop owner was actually satisfied
+
+with your first work,
+
+identifying these three segments.
+
+But now the owner would like to,
+
+reduce the complexity of this data set
+
+by ending up with a smaller amount of features.
+
+And at the same time, this owner would like you
+
+to build a predictive model that will be trained
+
+on these data, including the features up to here
+
+and the dependent variable,
+
+so that for each new wine that this owner has in its shop
+
+well we can deploy this predictive model
+
+applied to a reduced dimensionality data set
+
+to predict which customer segment
+
+this new wine belongs to, right?
+
+And therefore, once we manage to predict
+
+which customer segment this wine belongs to
+
+then we can recommend this wine to the right customers.
+
+And that's exactly why what we're about to do
+
+is like a recommender system.
+
+Because for each new wine that will be in the shop,
+
+well, our predictive model will tell us
+
+to which customer segment it will be the most appropriate,
+
+it will be the most appreciated.
+
+All right, so that's the business case study.
+
+And therefore, our predictive model
+
+will add tons of value to this owner.
+
+Therefore, if this owner manages to build
+
+a good recommender system
+
+of course it will optimize the sales
+
+and therefore the profit of the business, okay.
+
+So that's what the case study is about.
+
+Now we're gonna move on to the implementation of course,
+
+therefore I'm opening this file Principle Component Analysis
+
+which you have the choice to open
+
+with either Google Collaboratory or Jupyter Notebook
+
+as we did in the previous section on CNNs.
+
+But there we go, let's open it with Google Collaboratory
+
+and enjoy a brand new implementation on it.
+
+All right.
+
+So here is the implementation principle component analysis.
+
+This is in read only mode.
+
+So as usual, we will create a copy
+
+by clicking file here and then save a copy in drive.
+
+This will create a copy inside which
+
+we will be able to re-implement
+
+not the whole implementation this time
+
+because I will explain that most of the cells
+
+are cells we already did before,
+
+many times in a classification part
+
+and also in the first section of part eight.
+
+So we won't have to implement everything.
+
+This would be a waste of time.
+
+And mostly we rather want to focus
+
+on dimensionality reduction.
+
+And therefore here is what we're gonna do.
+
+I'm gonna show you the implementation of course
+
+but the only cell that we will re-implement
+
+will be this one, applying PCA.
+
+So let's remove it right away,
+
+not the text cell only this one.
+
+And now I'm gonna show you that indeed,
+
+all the cells are super familiar to us, right?
+
+Because indeed we start by importing the libraries
+
+that we did 100 times, right?
+
+We have the three essential libraries here.
+
+Then we import the data set with the exact same code
+
+as the one you have in your data progressing template.
+
+So of course here I just put the right name of the data set
+
+which is wine.csv, okay?
+
+Then you will recognize the next steps
+
+of the data progressing template
+
+which is to split the data set into the train set
+
+and the test set exactly the same code.
+
+Then we apply future scaling as it is,
+
+most of the time recommended.
+
+So we apply it of course on separately the train set
+
+and the test set, and that closes
+
+the data pre-processing phase.
+
+Then we apply PCA and that's of course
+
+the cell we will re-implement together.
+
+Then let me just remove all the outputs here
+
+so that you don't see them.
+
+I hope you closed your eyes when I just remove them
+
+but there you now close your eyes a little bit.
+
+I'm going to remove that output as well.
+
+Because actually the dimensionality reduction technique
+
+that we'll use, will manage to get us great result
+
+with only two extracted features, right?
+
+We're not reducing the number of existing features
+
+we are creating new extracted features
+
+based on these existing features.
+
+So we will get totally different new features
+
+at the end, which we call, principle components.
+
+So we'll have principle component one
+
+and principle component two at the end.
+
+But there we go.
+
+So back to our implementation after applying PCA
+
+which we will redo together.
+
+Well, we trained the logistic regression model
+
+on the train set.
+
+I chose the logistic regression model
+
+as the first model of our classification toolkit
+
+but I could have chosen any other ones
+
+but you will see that we'll get great results with this one
+
+but feel free to choose another classification model,
+
+any will work.
+
+But notice that it is important to apply PCA
+
+before training your classification model
+
+on the train set, right?
+
+You want to reduce the dimensionality of your data set
+
+before of course, training it on your training set, right?
+
+The training set basically is the final version of your data
+
+after you performed all the data pre-processing phase
+
+and dimensionality reduction if you want, okay?
+
+So the training happens after applying
+
+your dimensionality reduction technique.
+
+And then of course, well, we will make the confusion matrix
+
+you know how to do that.
+
+We did it many times.
+
+And then since our dimensionality reduction technique
+
+will get us great results with only two extracted features
+
+principle component one and principle component two,
+
+well that will allow us to visualize the train set results
+
+in two dimensions, right?
+
+Because remember that,
+
+each dimension corresponds to one feature.
+
+And we do this for the training set right here
+
+and the test set, okay?
+
+So as you can see, what I did with this implementation
+
+is something you can do in less than five minutes right now,
+
+thanks to your toolkit, right?
+
+Because you just need to take
+
+the data pre-progressing toolkit to make these first cells.
+
+Then you just need to grab the feature scaling tool
+
+in your data progressing toolkit.
+
+Then you just need to grab your logistic regression
+
+implementation to implement this cell.
+
+And same for the other ones, the confusion matrix.
+
+And same for these last two, visualizing the transit results
+
+and visualizing the test results.
+
+These are all cells that you have
+
+in your logistic regression implementation.
+
+So absolutely no need to do it together again.
+
+And therefore we can now focus directly
+
+on this cell applying PCA.
+
+So there we go, we're gonna create a new code cell
+
+and now let's implement PCA, principle component analysis.
+
+All right.
+
+So you could almost press pause on the video now
+
+and get the right tool from the psych learn API tool,
+
+see how to implement this.
+
+That would be a good exercise.
+
+But if you don't wanna do it, that's fine.
+
+Let's implement this right now.
+
+And as you guess by what I've just said,
+
+well, we're gonna implement PCA
+
+using the psych learn library.
+
+So the first thing we'll do is start from psych learn
+
+from which we're gonna get access to a certain module
+
+which we will find in the psych learn API
+
+and which is called decomposition, just like that.
+
+Decomposition from which we're gonna import of course,
+
+a class that will allow us to build this object
+
+which will be nothing else than this PCA tool
+
+that will apply dimensionality reduction on our data sets,
+
+and that class is called very simply PCA, okay?
+
+So you can't miss it in the API.
+
+PCA, and now next natural step is of course to create
+
+an object or an instance of this class.
+
+And guess how we're gonna call that object?
+
+Well, very simply, we're gonna call that object PCA, right?
+
+So this is super intuitive.
+
+And now you know the next step.
+
+Next step is to call the PCA class
+
+which needs to take one essential argument.
+
+We only have to input one argument here
+
+and you can totally guess what this argument will be, right?
+
+It is the final number of extracted features
+
+you wanna end up with in your new data set.
+
+And that argument to choose that number
+
+is called N_components.
+
+N_components.
+
+All right, so now the question is of course
+
+which number should we choose, right?
+
+How do we know down to which number of features, right?
+
+Extracted features we want to reduce the dimensionality
+
+of our data set?
+
+Well, I have a very simple answer to that question.
+
+What I usually do is start with two.
+
+Two principle components, therefore two extracted features
+
+and see the results I get in the end.
+
+And thanks to our code, our code template
+
+we can check that very quickly and easily.
+
+And besides, we do wanna try with two
+
+because then if we get good results with two
+
+well we will be able to visualize the training set result
+
+and test set result in two dimensions,
+
+in this nice plot that we had in part three classification.
+
+So we definitely wanna start with two.
+
+And if we get really poor results
+
+and we see on the graphics here
+
+that we can't separate the three classes properly,
+
+remember with those different prediction regions
+
+and the prediction boundary,
+
+well, if we see that we have poor results
+
+on the visualizations, then we can try with higher numbers
+
+of principle components.
+
+Meaning three, then four, and at some point we'll get,
+
+some extracted features that explain well enough
+
+the variance, which is exactly what PCA is about, right?
+
+It is about extracting some features that explain
+
+well enough the variance.
+
+And once you find them, well you will get good results
+
+even with a lower dimensionality, okay?
+
+So let's try with two and let's see what we'll get.
+
+But I already told you that we'll get amazing results.
+
+Therefore, there you go.
+
+End components equals two.
+
+Two principle components
+
+or in other words, two extracted features, okay?
+
+So that's for our object.
+
+And now the next step of course is to apply this object
+
+to our training set to reduce the dimensionality
+
+of our training set in order to ease the learning process
+
+of the logistic regression model.
+
+But also we will have to apply it on the test set
+
+because remember that the predict method
+
+that we will call here has to be called
+
+on the exact same format of data
+
+as to one that was used for the training set.
+
+So as long as you apply some transformations
+
+like data pre-processing
+
+or dimensionality reduction on your training set,
+
+well you have to do the same on your test set.
+
+However be careful, exactly as feature scaling,
+
+we will have to apply the fit transform method
+
+on the training set
+
+but only the transform method on the test set.
+
+And that's always for the same reason,
+
+that's because we want to avoid information leakage
+
+on the test set, right?
+
+The test set is supposed to be new observations
+
+like data on which we deploy our model in production
+
+and therefore we're not supposed to fit our scaler
+
+or feature extractor objects on the test set.
+
+We can apply them to transform them, right?
+
+Because they were fitted on the train set
+
+but we can't fit them again
+
+to the test set because that would be like
+
+trying to get some hints of information
+
+from the test set that we're not supposed to have.
+
+That's exactly what information leakage is about.
+
+So there you go.
+
+I said everything now you can press pause on this video
+
+to finish this implementation of PCA,
+
+and in two seconds I'm going to implement with you
+
+the solution.
+
+All right, I hope you did well, now let's do it together.
+
+So as we said, we want to apply this PCA object separately
+
+on the train set and test set.
+
+So first I'm gonna take X train, all right?
+
+Which I'm going to update by applying this PCA object
+
+from which I'm gonna call the fit transform method
+
+on this older version of X train,
+
+meaning before the transformation of PCA.
+
+And so here, what happens technically
+
+is that the fit part of this fit transfer method
+
+will get all the information it needs
+
+from X train to apply principle component analysis.
+
+And then of course the transform part
+
+of this fit transfer method
+
+will apply the transformation itself to
+
+extract the principle component features, okay?
+
+So that what it means technically.
+
+And now, well let's do the same actually for X test.
+
+So I'm copying this, basting it here
+
+and replacing here X trained by X test,
+
+then X train here again by X test,
+
+and only applying the transform method.
+
+And there we go my friends,
+
+this implementation is already over.
+
+
+SuperDataScience
+posted an announcement · 11 days ago · 
+🚨 [Kirill]: Machine Learning is changing… FAST…
+Greetings, future Expert Data Scientist!
+
+
+
+We've uncovered a GAME-CHANGING revelation in the DS/ML industry.
+
+
+
+There is something HUGE happening in the space of Data Science and Machine
