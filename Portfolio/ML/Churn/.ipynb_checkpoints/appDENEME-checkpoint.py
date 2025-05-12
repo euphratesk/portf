@@ -26,7 +26,7 @@ df=pd.read_csv('df.csv')
 #scaler= pickle.load(open(r'C:\Users\Admin\OneDrive\Desktop\TECHPRO\AMZstreamlit\scaler.pkl', 'rb'))
 #model_logistic = pickle.load(open(r'C:\Users\Admin\OneDrive\Desktop\TECHPRO\AMZstreamlit\lg.pkl', 'rb'))
 #model_xgboost = pickle.load(open(r'C:\Users\Admin\OneDrive\Desktop\TECHPRO\AMZstreamlit\xgb.pkl', 'rb'))
-model_random_forest = pickle.load(open(r'C:\Users\Admin\OneDrive\Desktop\TECHPRO\Git-Github\AMZ\Churn\rf_best.pkl', 'rb'))
+model_random_forest = pickle.load(open(r'C:\Users\Admin\OneDrive\Desktop\TIG\GitPortf\Portfolio\ML\Churn\rf_best.pkl', 'rb'))
 
 
 # Dictionary to map country abbreviations to full names
